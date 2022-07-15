@@ -1,5 +1,7 @@
 import easygui
 import time
+import math
+
 
 AOCDAY = "01"
 
@@ -11,13 +13,31 @@ def readFile(fileName):
         lines[i] = lines[i].rstrip()
     return lines
 
+def fuelCalc(mass):
+    if (math.floor((mass)/3)-2) <0:
+        return 0
+    else:
+        return math.floor((mass)/3)-2
+
 def part1(lines):
     # Code the solution to part 1 here, returning the answer as a string
-    return("Part 1 answer.")
+    totalFuel = 0
+    for line in lines:
+        # totalFuel += math.floor(int(line)/3)-2
+        totalFuel += fuelCalc(int(line))
+
+    #return("You require a fuel amount of "+str(totalFuel)+".")
+    return(f"You require a fuel amount of {(totalFuel)}.")
 
 def part2(lines):
     # Code the solution to part 1 here, returning the answer as a string
-    return("Part 2 not implemented yet.")
+    totalFuel = 0
+    for line in lines:
+        calcedFuel = fuelCalc(int(line))
+        while calcedFuel > 0:
+            totalFuel = totalFuel + calcedFuel
+            calcedFuel = fuelCalc(calcedFuel)
+    return(f"You require a new fuel amount of {(totalFuel)}.")
 
 def main ():
     # Opens a dialog to select the input file
