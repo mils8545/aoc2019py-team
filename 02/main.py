@@ -62,12 +62,13 @@ def part2(lines):
     
     TARGET = 19690720 #all caps b/c it is a constant (convention)
 
+    memory=[]
+    for number in lines[0].split(","):
+        memory.append(int(number))
+
     for i in range(100):
         for j in range(100):
-            memory=[]
-            for number in lines[0].split(","):
-                memory.append(int(number))
-            if runComputer(memory,i,j) == TARGET:
+            if runComputer(memory.copy(),i,j) == TARGET:
                 return(f"The program that produces the desired result is {100*i+j}")
             
 
