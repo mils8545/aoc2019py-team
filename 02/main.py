@@ -17,62 +17,52 @@ def readFile(fileName):
 
 
 
+
+
+class Computer:
+    def __init__(self, programString):
+        self.program = [int(number) for number in programString.split(",")]
+
+    def run(self, noun, verb):
+        memory = self.program.copy()
+        if noun != None:
+            memory[1] = noun
+        if verb != None:
+            memory[2] = verb
+        programCounter = 0
+        
+        while memory[programCounter] != 99:
+            if memory[programCounter] == 1:
+                memory[memory[programCounter+3]] = memory[memory[programCounter+1]] + memory[memory[programCounter+2]]
+                programCounter += 4
+            elif memory[programCounter] == 2:
+                memory[memory[programCounter+3]] = memory[memory[programCounter+1]] * memory[memory[programCounter+2]]
+                programCounter += 4
+            else:
+                print("Error: Unknown opcode")
+                break
+        return memory[0]
+
 def part1(lines):
     # Code the solution to part 1 here, returning the answer as a string
     
-    memory=[]
-    programCounter = 0 
-    for number in lines[0].split(","):
-        memory.append(int(number))
+    computer = Computer(lines[0])
 
-    memory[1] = 12
-    memory[2] = 2
-
-    while memory[programCounter] != 99:
-       
-        if memory[programCounter] == 1:
-            memory[memory[programCounter+3]] = memory[memory[programCounter+1]] + memory[memory[programCounter+2]]
-            programCounter += 4
-
-        elif memory[programCounter] == 2:
-            memory[memory[programCounter+3]] = memory[memory[programCounter+1]] * memory[memory[programCounter+2]]
-            programCounter += 4
-
-    return(f"The value at memory address 0 is {memory[0]}!") 
-
-def runComputer(memory, inputA, inputB):
-    programCounter = 0 
-
-    memory[1] = inputA
-    memory[2] = inputB
-
-    while memory[programCounter] != 99:
-       
-        if memory[programCounter] == 1:
-            memory[memory[programCounter+3]] = memory[memory[programCounter+1]] + memory[memory[programCounter+2]]
-            programCounter += 4
-
-        elif memory[programCounter] == 2:
-            memory[memory[programCounter+3]] = memory[memory[programCounter+1]] * memory[memory[programCounter+2]]
-            programCounter += 4
-    return memory[0]
+    result = computer.run(12, 2)
+    return(f"The value at memory address 0 is {result}!") 
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
     
     TARGET = 19690720 #all caps b/c it is a constant (convention)
 
-    memory=[]
-    for number in lines[0].split(","):
-        memory.append(int(number))
+    computer = Computer(lines[0])
 
-    for i in range(100):
-        for j in range(100):
-            if runComputer(memory.copy(),i,j) == TARGET:
-                return(f"The program that produces the desired result is {100*i+j}")
-            
-
-    return(f"ANSWER HERE")
+    for noun in range(100):
+        for verb in range(100):
+            if computer.run(noun, verb) == TARGET:
+                return(f"The program that produces the desired result is {100*noun+verb}")
+    return(f"Didn't find an answer")
 
 def main ():
     # Opens a dialog to select the input file
