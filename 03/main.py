@@ -1,7 +1,5 @@
 import easygui
 import time
-import math
-
 
 AOCDAY = "03"
 
@@ -108,7 +106,6 @@ def part2(lines):
     
     intersections.sort(key=lambda x:manhatthanDistance(x))
 
-
     wire1Dist = {}
     wire2Dist = {}
     x = size
@@ -140,7 +137,6 @@ def part2(lines):
     intersections.sort(key=lambda x:wire1Dist[x]+wire2Dist[x])
     closestIntersection = wire1Dist[intersections[0]] + wire2Dist[intersections[0]]
     return(f"The closest intersection point is {closestIntersection} away")
-
 
 def main ():
     # Opens a dialog to select the input file
