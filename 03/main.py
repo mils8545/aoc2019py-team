@@ -32,90 +32,115 @@ def manhatthanDistance(cross):
     y = abs(int(cross.split(",")[1]))
     return x + y
 
+DIRS = {"U":(0,1),"D":(0,-1),"L":(-1,0),"R":(1,0)}
+
+def findSize(path1, path2):
+    x, y, maxX, maxY, minX, minY = 0, 0, 0, 0, 0, 0
+
+    for step in path1:
+        x += DIRS[step.dir][0] * step.dis
+        y += DIRS[step.dir][1] * step.dis
+        maxX = max(x, maxX)
+        maxY = max(y, maxY)
+        minX = min(x, minX)
+        minY = min(y, minY)
+    x,y = 0, 0
+    for step in path2:
+        x += DIRS[step.dir][0] * step.dis
+        y += DIRS[step.dir][1] * step.dis
+        maxX = max(x, maxX)
+        maxY = max(y, maxY)
+        minX = min(x, minX)
+        minY = min(y, minY)
+    size = max([maxX,maxY,abs(minX),abs(minY)])
+    return size
 
 def part1(lines):
-    # Code the solution to part 1 here, returning the answer as a string
     path1, path2 = parseLines(lines)
+    size = findSize(path1, path2)
+
+    grid = [[False for i in range(size*2+1)] for j in range(size*2+1)]
+
+    x = size
+    y = size
     for step in path1:
-        print(step.dir, step.dis)
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            grid[y][x] = True
+    x = size
+    y = size
+    intersections = []
     for step in path2:
-        print(step.dir, step.dis)
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            if grid[y][x] == True:
+                intersections.append(str(x-size) + "," + str(y-size))
     
-    path1points = []
-    x = 0
-    y = 0
-    for step in path1:
-        if step.dir == "U":
-            for i in range(step.dis):
-                y += 1
-                path1points.append(str(x) + "," + str(y))
-        elif step.dir == "D":
-            for i in range(step.dis):
-                y -= 1
-                path1points.append(str(x) + "," + str(y))   
-        elif step.dir == "R":
-            for i in range(step.dis):
-                x += 1
-                path1points.append(str(x) + "," + str(y)) 
-        elif step.dir == "L":
-            for i in range(step.dis):
-                x -= 1
-                path1points.append(str(x) + "," + str(y))   
+    intersections.sort(key=lambda x:manhatthanDistance(x))
 
-    #print(path1points)
-
-    crosspoints = []
-    # for point1 in path1points:
-    #     if point1 in path2points:
-    #         crosspoints.append(point1)
-    # print(crosspoints)
-
-    path2points = []
-    x = 0
-    y = 0
-    for step in path2:
-        if step.dir == "U":
-            for i in range(step.dis):
-                y += 1
-                path2points.append(str(x) + "," + str(y))
-                if path2points[-1] in path1points:
-                    crosspoints.append(path2points[-1])
-        elif step.dir == "D":
-            for i in range(step.dis):
-                y -= 1
-                path2points.append(str(x) + "," + str(y))  
-                if path2points[-1] in path1points:
-                    crosspoints.append(path2points[-1])             
-        elif step.dir == "R":
-            for i in range(step.dis):
-                x += 1
-                path2points.append(str(x) + "," + str(y)) 
-                if path2points[-1] in path1points:
-                    crosspoints.append(path2points[-1])
-        elif step.dir == "L":
-            for i in range(step.dis):
-                x -= 1
-                path2points.append(str(x) + "," + str(y))   
-                if path2points[-1] in path1points:
-                    crosspoints.append(path2points[-1])
-
-    #print(path2points)
-    
-
-
-    crosspoints.sort(key=lambda x:manhatthanDistance(x))
-    print(crosspoints)
-
-
-
-    return(f"The closest intersection point is {manhatthanDistance(crosspoints[0])} away") 
+    return(f"The closest intersection point is {manhatthanDistance(intersections[0])} away") 
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
-    
-    
+    path1, path2 = parseLines(lines)
+    size = findSize(path1, path2)
 
-    pass
+    grid = [[False for i in range(size*2+1)] for j in range(size*2+1)]
+
+    x = size
+    y = size
+    for step in path1:
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            grid[y][x] = True
+    x = size
+    y = size
+    intersections = []
+    for step in path2:
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            if grid[y][x] == True:
+                intersections.append(str(x-size) + "," + str(y-size))
+    
+    intersections.sort(key=lambda x:manhatthanDistance(x))
+
+
+    wire1Dist = {}
+    wire2Dist = {}
+    x = size
+    y = size
+    stepCounter = 0
+    for step in path1:
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            stepCounter += 1
+            coordString = str(x-size) + "," + str(y-size)
+            if coordString in intersections:
+                if (coordString) not in wire1Dist:
+                    wire1Dist[coordString] = stepCounter
+
+    x = size
+    y = size
+    stepCounter = 0
+    for step in path2:
+        for i in range(step.dis):
+            x += DIRS[step.dir][0]
+            y += DIRS[step.dir][1]
+            stepCounter += 1
+            coordString = str(x-size) + "," + str(y-size)
+            if coordString in intersections:
+                if (coordString) not in wire2Dist:
+                    wire2Dist[coordString] = stepCounter
+    
+    intersections.sort(key=lambda x:wire1Dist[x]+wire2Dist[x])
+    closestIntersection = wire1Dist[intersections[0]] + wire2Dist[intersections[0]]
+    return(f"The closest intersection point is {closestIntersection} away")
+
 
 def main ():
     # Opens a dialog to select the input file
