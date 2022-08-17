@@ -11,12 +11,6 @@ def readFile(fileName):
         lines[i] = lines[i].rstrip()
     return lines
 
-
-
-
-
-
-
 class Computer:
     def __init__(self, programString):
         self.program = [int(number) for number in programString.split(",")]

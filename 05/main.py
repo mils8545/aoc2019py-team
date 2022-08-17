@@ -1,9 +1,5 @@
-from audioop import add
-import opcode
 import easygui
 import time
-import math
-
 
 AOCDAY = "05"
 
@@ -14,12 +10,6 @@ def readFile(fileName):
     for i in range(len(lines)):
         lines[i] = lines[i].rstrip()
     return lines
-
-
-
-
-
-
 
 class Computer:
     def __init__(self, programString):
