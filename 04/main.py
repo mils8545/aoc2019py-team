@@ -1,7 +1,5 @@
-from pickle import TRUE
 import easygui
 import time
-import math
 
 
 AOCDAY = "04"
@@ -43,6 +41,7 @@ def part1(lines):
 
     return(f"There are {validateCount} different passwords within the range") 
 
+
 def part2Validate(num):
     numString = str(num)
     ascending = True
@@ -63,6 +62,7 @@ def part2Validate(num):
 
     return ascending and adjacent
 
+
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
     startNum = int(lines[0].split("-")[0])
@@ -73,11 +73,7 @@ def part2(lines):
         if part2Validate(num):
             validateCount += 1
 
-
     return(f"There are {validateCount} different passwords within the range") 
-    
-
-    pass
 
 def main ():
     # Opens a dialog to select the input file

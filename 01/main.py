@@ -2,7 +2,6 @@ import easygui
 import time
 import math
 
-
 AOCDAY = "01"
 
 def readFile(fileName):
