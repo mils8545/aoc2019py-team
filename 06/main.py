@@ -104,11 +104,6 @@ def part1(lines):
 
     orbits = parse_lines(lines)
 
-    # for orbit in orbits:
-    #     parent = tree.get_node(orbit[0])
-    #     parent.add_child(orbit[1], parent)
-
-    
     while len(orbits) > 0:
         found_one = False
 
@@ -131,22 +126,15 @@ def part2(lines):
 
     orbits = parse_lines(lines)
 
-    # for orbit in orbits:
-    #     parent = tree.get_node(orbit[0])
-    #     parent.add_child(orbit[1], parent)
-
-    
     while len(orbits) > 0:
-        found_one = False
-
+        remove_list = []
         for i, orbit in enumerate(orbits):
-
-            if not found_one:
-
-                if tree.contains(orbit[0]):
-                    parent = tree.get_node(orbit[0])
-                    parent.add_child(orbit[1], parent)
-                    orbits.pop(i)
+            if tree.contains(orbit[0]):
+                parent = tree.get_node(orbit[0])
+                parent.add_child(orbit[1], parent)
+                remove_list.append(i)
+        for i in reversed(remove_list):
+            orbits.pop(i)
 
     intersection = tree.find_you_san()
 
@@ -158,9 +146,7 @@ def main ():
     # Opens a dialog to select the input file
     # Times and runs both solutions
     # Prints the results
-    # fileName = easygui.fileopenbox(default=f"./"+AOCDAY+"/"+"*.txt")
-    # fileName = "//atco/homedrive/cgy2/X9VR$/My Documents/GitHub/aoc2019py-team/06/sample-input.txt"
-    fileName = "//atco/homedrive/cgy2/X9VR$/My Documents/GitHub/aoc2019py-team/06/matthew-input.txt"
+    fileName = easygui.fileopenbox(default=f"./"+AOCDAY+"/"+"*.txt")
     if fileName == None:
         print("ERROR: No file selected.")
         return
