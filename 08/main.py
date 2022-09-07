@@ -22,8 +22,6 @@ def part1(lines):
     DEPTH = len(lines[0])//(WIDTH*HEIGHT)
 
     img = [[[0 for i in range(WIDTH)] for j in range(HEIGHT)] for k in range(DEPTH)]
-    # for i,pixel in enumerate(lines[0]):
-    #     img[i//DEPTH][i%DEPTH//HEIGHT][i%HEIGHT//WIDTH] = int(pixel)
     for i in range(len(lines[0])):
         img[i//(WIDTH*HEIGHT)][(i%(WIDTH*HEIGHT))//WIDTH][(i%WIDTH)] = int(lines[0][i])
     fewest0 = 150000
@@ -48,8 +46,6 @@ def part2(lines):
     DEPTH = len(lines[0])//(WIDTH*HEIGHT)
 
     img = [[[0 for i in range(WIDTH)] for j in range(HEIGHT)] for k in range(DEPTH)]
-    # for i,pixel in enumerate(lines[0]):
-    #     img[i//DEPTH][i%DEPTH//HEIGHT][i%HEIGHT//WIDTH] = int(pixel)
     for i in range(len(lines[0])):
         img[i//(WIDTH*HEIGHT)][(i%(WIDTH*HEIGHT))//WIDTH][(i%WIDTH)] = int(lines[0][i])
     fewest0 = 150000
@@ -65,14 +61,12 @@ def part2(lines):
         something = ""
         for pixel in row:
             if pixel == 1:
-                something = something + "@"
+                something = something + "██"
             else:
-                something = something + " "
+                something = something + "  "
         print(something)
     
     return "Read text above"
-
-    pass
 
 def main ():
     # Opens a dialog to select the input file

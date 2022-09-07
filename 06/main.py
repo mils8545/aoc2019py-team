@@ -65,10 +65,6 @@ class Node:
 
         for child in self.children:
 
-            # print(self.name)
-            # print("YOU: "+str(child.contains("YOU")))
-            # print("SAN: "+str(child.contains("SAN")))
-
             if child.contains("YOU") and not child.contains("SAN"):
                 return self
             
