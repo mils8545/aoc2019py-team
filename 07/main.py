@@ -1,9 +1,6 @@
 import easygui
 import time
 import itertools
-import math
-
-
 
 AOCDAY = "07"
 

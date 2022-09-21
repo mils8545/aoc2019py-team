@@ -1,7 +1,5 @@
 import easygui
 import time
-import math
-
 
 AOCDAY = "08"
 
