@@ -240,6 +240,7 @@ def part1(lines):
     while computerState == 3:
     # for i in range(10):
         output,computerState = computer.run([currentPixel.colour])
+        # print(currentPixel,output[0],output[1],currentPixel.colour)
         currentPixel.colour = output[0]
         if currentPixel not in paintedPixels:
             paintedPixels.append(currentPixel)
@@ -250,16 +251,52 @@ def part1(lines):
         newPixel = currentPixel + directions[currentDirection]
         if newPixel not in paintedPixels:
             currentPixel = newPixel
+            currentPixel.colour = 0
         else:
             currentPixel = paintedPixels[paintedPixels.index(newPixel)]
     # for pixel in paintedPixels:
     #     print(pixel)
-
     return(f"The number of painted pixels is {len(paintedPixels)}")
-
+    
 
 def part2(lines):
-    # Code the solution to part 1 here, returning the answer as a string
+    # Code the solution to part 2 here, returning the answer as a string
+    computer = ComputerState(lines[0])
+    # output = computer.run([0])
+    paintedPixels = []
+    computerState = 3
+    currentPixel = Pixel(0,0,1)
+    directions = [Pixel(0,1),Pixel(1,0),Pixel(0,-1),Pixel(-1,0)]
+    currentDirection = 0
+    counter = 0
+    while computerState == 3:
+        counter += 1
+        print(counter)
+    # for i in range(10):
+        output,computerState = computer.run([currentPixel.colour])
+        print(currentPixel,output[0],output[1],currentPixel.colour)
+        currentPixel.colour = output[0]
+        if currentPixel not in paintedPixels and currentPixel.colour == 1:
+            paintedPixels.append(currentPixel)
+        if output[1] == 1:
+            currentDirection = (currentDirection + 1) % 4
+        else:
+            currentDirection = (currentDirection - 1) % 4
+        newPixel = currentPixel + directions[currentDirection]
+        if newPixel not in paintedPixels:
+            currentPixel = newPixel
+            currentPixel.colour = 0
+        else:
+            currentPixel = paintedPixels[paintedPixels.index(newPixel)]
+   
+    minX = minY = maxX = maxY = 0
+    for pixel in paintedPixels:
+        minX = min(minX,pixel.x)
+        maxX = max(maxX,pixel.x)
+        minY = min(minY,pixel.y)
+        maxY = max(maxY,pixel.y)
+    print(minX, maxX, minY, maxY)
+    return(f"The number of painted pixels is {len(paintedPixels)}")
     
     
     
