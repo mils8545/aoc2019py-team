@@ -142,9 +142,7 @@ def part2(lines):
         if initial_z == current_z and period_z == 0:
             period_z = steps
 
-    return ""
-
-    # return(f"It takes {math.lcm(period_x, period_y, period_z)} steps for this system to repeat") 
+    return(f"It takes {math.lcm(period_x, period_y, period_z)} steps for this system to repeat") 
 
 def main ():
     # Opens a dialog to select the input file
