@@ -1,7 +1,8 @@
 import easygui
 import time
+import os
 
-AOCDAY = "11"
+AOCDAY = "13"
 
 def readFile(fileName):
     # Reads the file at fileName and returns a list of lines stripped of newlines
@@ -127,98 +128,116 @@ class ComputerState:
         opCode = self.memory[self.programCounter] % 100
         return RunResult(outputStream,opCode)
 
-class Pixel:
-    def __init__(self,x,y,colour=0):
-        self.x = x
-        self.y = y
-        self.colour = colour
-    def __str__(self):
-        return f"({self.x},{self.y})"
-    def __repr__(self):
-        return f"({self.x},{self.y})"
-    def __eq__(self,other):
-        return self.x == other.x and self.y == other.y
-    def __add__(self,other):
-        return Pixel(self.x + other.x, self.y+other.y, self.colour)
-
 def part1(lines):
     # Code the solution to part 1 here, returning the answer as a string
     computer = ComputerState(lines[0])
-    # output = computer.run([0])
-    paintedPixels = []
-    computerState = 3
-    currentPixel = Pixel(0,0,0)
-    directions = [Pixel(0,1),Pixel(1,0),Pixel(0,-1),Pixel(-1,0)]
-    currentDirection = 0
-    while computerState == 3:
-    # for i in range(10):
-        result = computer.run([currentPixel.colour])
-        output = result.outputStream
-        computerState = result.opCode
-        currentPixel.colour = output[0]
-        if currentPixel not in paintedPixels:
-            paintedPixels.append(currentPixel)
-        if output[1] == 1:
-            currentDirection = (currentDirection + 1) % 4
-        else:
-            currentDirection = (currentDirection - 1) % 4
-        newPixel = currentPixel + directions[currentDirection]
-        if newPixel not in paintedPixels:
-            currentPixel = newPixel
-            newPixel.colour = 0
-        else:
-            currentPixel = paintedPixels[paintedPixels.index(newPixel)]
-    return(f"The number of painted pixels is {len(paintedPixels)}")
+    result = computer.run([])
+
+    output = result.outputStream
+
+    max_x = max_y = 0
+    block_count = 0
+    for i in range(0, len(output), 3):
+        max_x = max(max_x, output[i])
+        max_y = max(max_y, output[i+1])
+        if output[i+2] == 2:
+            block_count += 1
+
+    screen = [[0 for i in range(max_x+1)] for j in range(max_y+1)]
+
+    sprites = {0: " ", 1: "█", 2: "▒", 3: "▀", 4: "o"}
+
+    for i in range(0, len(output), 3):
+        screen[output[i+1]][output[i]] = sprites[output[i+2]]
+
+    return f"There are {block_count} blocks on the screen."
+
+def updateScreen(screen, output):
+    sprites = {0: " ", 1: "█", 2: "▒", 3: "▀", 4: "o"}
+
+    # BUILD SCREEN
+    for i in range(0, len(output), 3):
+        if output[i] != -1:
+            if output[i+2] == 4: # check if it's a ball
+                ball_x = output[i]
+            if output[i+2] == 3: # check if it's a paddle
+                paddle_x = output[i]
+            screen[output[i+1]][output[i]] = sprites[output[i+2]]
+
+def printScreen(screen, score):
+    # PRINT SCREEN
+    for line in screen:
+        print("".join(line))
+
+    # PRINT SCORE
+    print(f"Score: {score}")
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
     computer = ComputerState(lines[0])
-    paintedPixels = []
-    computerState = 3
-    currentPixel = Pixel(0,0,1)
-    directions = [Pixel(0,1),Pixel(1,0),Pixel(0,-1),Pixel(-1,0)]
-    currentDirection = 0
-    while computerState == 3:
-        result = computer.run([currentPixel.colour])
+
+    computer.memory[0] = 2
+
+    result = computer.run([]) # run empty first for computer to wait for input
+
+    output = result.outputStream
+
+    max_x = max_y = 0
+    score = 0
+    for i in range(0, len(output), 3):
+        max_x = max(max_x, output[i])
+        max_y = max(max_y, output[i+1])
+
+    screen = [[0 for i in range(max_x+1)] for j in range(max_y+1)]
+
+
+    ball_x = paddle_x = 0
+    # BUILD SCREEN
+    for i in range(0, len(output), 3):
+        if output[i] == -1:
+            score = output[i+2]
+        else:
+            if output[i+2] == 4: # check if it's a ball
+                ball_x = output[i]
+            if output[i+2] == 3: # check if it's a paddle
+                paddle_x = output[i]
+
+    # # Uncomment to watch gameplay
+    # os.system("cls") # clear console
+    # updateScreen(screen, output)
+    # printScreen(screen, score)
+
+    while result.opCode != 99:
+
+        if ball_x < paddle_x:
+            controls = -1
+        elif ball_x > paddle_x:
+            controls = 1
+        else:
+            controls = 0
+
+        # # Uncomment to play by hand
+        # controls = int(input("-1: Left, 0: Neutral 1: Right -> "))
+
+        result = computer.run([controls])
         output = result.outputStream
-        computerState = result.opCode
-        currentPixel.colour = output[0]
-        if currentPixel not in paintedPixels:
-            paintedPixels.append(currentPixel)
-        if output[1] == 1:
-            currentDirection = (currentDirection + 1) % 4
-        else:
-            currentDirection = (currentDirection - 1) % 4
-        newPixel = currentPixel + directions[currentDirection]
-        if newPixel not in paintedPixels:
-            currentPixel = newPixel
-            newPixel.colour = 0
-        else:
-            currentPixel = paintedPixels[paintedPixels.index(newPixel)]
-    whitePixels = []
-    for pixel in paintedPixels:
-        if pixel.colour == 1:
-            whitePixels.append(pixel)
-    minX = 0
-    maxX = 0
-    minY = 0
-    maxY = 0
-    for pixel in whitePixels:
-        minX = min(minX, pixel.x)
-        maxX = max(maxX, pixel.x)
-        minY = min(minY, pixel.y)
-        maxY = max(maxY, pixel.y)
 
-    for y in range(maxY, minY - 1, -1):
-        printLine = ""
-        for x in range(minX, maxX+1, 1):
-            if Pixel(x, y, 0) in whitePixels:
-                printLine += "██"
+        # BUILD SCREEN
+        for i in range(0, len(output), 3):
+            if output[i] == -1:
+                score = output[i+2]
             else:
-                printLine += "  "
-        print(printLine)
+                if output[i+2] == 4: # check if it's a ball
+                    ball_x = output[i]
+                if output[i+2] == 3: # check if it's a paddle
+                    paddle_x = output[i]
 
-    return(f"Read the code above.")
+        # # Uncomment to watch gameplay
+        # os.system("cls") # clear console
+        # updateScreen(screen, output)
+        # printScreen(screen, score)
+
+    return(f"The final score after destroying all blocks is {score}")
 
 def main ():
     # Opens a dialog to select the input file
