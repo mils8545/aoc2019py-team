@@ -166,9 +166,6 @@ def part1(lines):
 
     while not done:
         while current_direction < 5:
-            # print(current_path)
-            # print(current_direction)
-            # print(seen_points)
             moved_point = current_point + moves[current_direction]
             if str(moved_point) not in seen_points:
                 result = computer.run([current_direction])
@@ -182,7 +179,7 @@ def part1(lines):
                 current_point = moved_point
                 if output == 2:
                     oxygen_location = current_point
-                    return len(current_path)
+                    return f"It would take {len(current_path)} moves to get to the oxygen location."
             else:
                 current_direction += 1
         computer.run([opposite(current_path[-1])])
@@ -192,30 +189,81 @@ def part1(lines):
         
         if len(current_path) == 0:
             done = True
-
-    for i in range(-25,26):
-        line = ""
-        for j in range(-25,26):
-            checkpoint = Point(j,i)
-            if checkpoint == oxygen_location:
-                line += "o"
-            elif checkpoint == Point(0,0):
-                line += "@"
-            elif str(checkpoint) in seen_points:
-                line += " "
-            else:
-                line += "#"
-        print(line)
+#   uncomment to draw map
+    # for i in range(-25,26):
+    #     line = ""
+    #     for j in range(-25,26):
+    #         checkpoint = Point(j,i)
+    #         if checkpoint == oxygen_location:
+    #             line += "o"
+    #         elif checkpoint == Point(0,0):
+    #             line += "@"
+    #         elif str(checkpoint) in seen_points:
+    #             line += " "
+    #         else:
+    #             line += "#"
+    #     print(line)
 
 
     # print(seen_points)
-    return f"Not implemented yet{oxygen_location}"
+    return f"Didn't find the oxygen location"
 
 
 def part2(lines):
+    computer = ComputerState(lines[0])
+
+    seen_points = []
+    current_path = []
+    current_point = Point(0,0)
+    current_direction = 1
+    moves = [Point(0,0),Point(0,1),Point(0,-1),Point(-1,0),Point(1,0)]
+    seen_points = [str(current_point)]
+    done = False
+    oxygen_location = None
     
+
+    while not done:
+        while current_direction < 5:
+            moved_point = current_point + moves[current_direction]
+            if str(moved_point) not in seen_points:
+                result = computer.run([current_direction])
+                output = result.outputStream[0]
+            else:
+                output = 0
+            if output != 0:
+                current_path.append(current_direction)
+                seen_points.append(str(moved_point))
+                current_direction = 1
+                current_point = moved_point
+                if output == 2:
+                    oxygen_location = current_point
+                    # return f"It would take {len(current_path)} moves to get to the oxygen location."
+            else:
+                current_direction += 1
+        computer.run([opposite(current_path[-1])])
+        current_point = current_point + moves[opposite(current_path[-1])]
+        current_direction = 1
+        current_path.pop(-1)
+        
+        if len(current_path) == 0:
+            done = True
     
-    return f"Not implemented yet"
+    oxygen_queue = [[oxygen_location, 0]]
+    oxygenated_points = [str(oxygen_location)]
+
+    while len(oxygenated_points) < len(seen_points):
+        current_point,current_mins = oxygen_queue.pop(0)
+        for i in range(1,len(moves)):
+            next_point = current_point + moves[i]
+            if str(next_point) in seen_points:
+                if str(next_point) not in oxygenated_points:
+                    # print(str(next_point),current_mins+1) # uncomment to see oxygen dispersal
+                    oxygenated_points.append(str(next_point))
+                    oxygen_queue.append([next_point, current_mins + 1])
+  
+
+    # print(seen_points)
+    return f"It takes {oxygen_queue[-1][-1]} minutes for the ship to completely fill with oxygen"
 
 def main ():
     # Opens a dialog to select the input file
