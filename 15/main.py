@@ -260,6 +260,22 @@ def part2(lines):
                     # print(str(next_point),current_mins+1) # uncomment to see oxygen dispersal
                     oxygenated_points.append(str(next_point))
                     oxygen_queue.append([next_point, current_mins + 1])
+
+        # # uncomment to draw flow of gas
+        # os.system("cls") # clear console
+        # for i in range(-19,22):
+        #     line = ""
+        #     for j in range(-21,21):
+        #         checkpoint = Point(j,i)
+        #         if checkpoint == oxygen_location:
+        #             line += "O"
+        #         elif str(checkpoint) in oxygenated_points:
+        #             line += "@"
+        #         elif str(checkpoint) in seen_points:
+        #             line += " "
+        #         else:
+        #             line += "#"
+        #     print(line)
   
 
     # print(seen_points)
