@@ -163,9 +163,9 @@ def part1(lines):
 
     # print(f"{len(grid)} {len(grid[0])}")
 
-    # # PRINT GRID
-    # for line in grid:
-    #     print(f"{''.join(line)}")
+    # PRINT GRID
+    for line in grid:
+        print(f"{''.join(line)}")
 
     score = 0
     for y in range(1, len(grid)-1):
@@ -226,7 +226,7 @@ def part2(lines):
     result = computer.run(stringToIntcode("n\n"))
 
     collected_dust = result.outputStream.pop(-1)
-    print(asciiToString(result.outputStream))
+    # print(asciiToString(result.outputStream))
    
     return f"The vacuum robot collected {collected_dust} amount of dust."
 
