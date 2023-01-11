@@ -210,17 +210,20 @@ def part2(lines):
 
     result = computer.run([])
     # print(asciiToString(result.outputStream))
-
-    result = computer.run(stringToIntcode("B,C,B,A,C,A,C,A,B,A\n"))
+    coded_string = "A,A,C,B,C,B,C,B,C,A\n"
+    codeA = "R,6,L,12,R,6\n"
+    codeB = "R,12,L,10,L,10\n"
+    codeC = "L,12,R,6,L,8,L,12\n"
+    result = computer.run(stringToIntcode(coded_string))
     # print(asciiToString(result.outputStream))
 
-    result = computer.run(stringToIntcode("R,12,L,10,R,10,L,8\n")) # A
+    result = computer.run(stringToIntcode(codeA)) # A
     # print(asciiToString(result.outputStream))
 
-    result = computer.run(stringToIntcode("R,12,L,10,R,12\n")) # B
+    result = computer.run(stringToIntcode(codeB)) # B
     # print(asciiToString(result.outputStream))
 
-    result = computer.run(stringToIntcode("L,8,R,10,R,6\n")) # C
+    result = computer.run(stringToIntcode(codeC)) # C
     # print(asciiToString(result.outputStream))
 
     result = computer.run(stringToIntcode("n\n"))
