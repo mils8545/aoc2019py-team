@@ -11,6 +11,16 @@ def readFile(fileName):
         lines = file.readlines()
     return lines
 
+def checkPortal(y,x,portals):
+    for portalName in portals:
+        if len(portals[portalName]) > 1:
+            if portals[portalName][0][0] == y and portals[portalName][0][1] == x:
+                return portals[portalName][1]
+            if portals[portalName][1][0] == y and portals[portalName][1][1] == x:
+                return portals[portalName][0]
+    return [-99999,-99999]
+
+
 
 
 def part1(lines):
@@ -26,7 +36,7 @@ def part1(lines):
     portals = {}
     for y in range(1,len(map)-1):
         for x in range(1,len(map[0])-1):
-            print(y,x)
+           
             if map[y][x] >= "A" and map[y][x] <= "Z":
                 if map[y-1][x] == ".":
                     portalname = map[y][x] + map[y+1][x]
@@ -52,8 +62,48 @@ def part1(lines):
                         portals[portalname] = [[y,x-1]]
                     else:
                         portals[portalname].append([y,x-1])    
-    for portal in portals:
-        print(portal,portals[portal])
+    # for portal in portals:
+    #     print(portal,portals[portal])
+
+    queue = [portals['AA'][0]+[0]]
+    
+    visited = []
+    directions = [[1,0],[-1,0],[0,1],[0,-1]]
+    targetY = portals['ZZ'][0][0]
+    targetX = portals['ZZ'][0][1]
+    target = f'{targetY},{targetX}'
+    # target = f'{8},{17}'
+
+    
+
+    while True:
+    # while queue[0][2] < 14:
+        y,x,steps = queue.pop(0)
+        # print(queue)
+        name = f'{y},{x}'
+        visited.append(name)
+        if name == target:
+            return steps
+        # print(y,x,steps)
+
+        for direction in directions:
+            newY = y + direction[0]
+            newX = x + direction[1]
+            if map[newY][newX] == '.' and f'{newY},{newX}' not in visited:
+                queue.append([newY,newX,steps+1])
+
+        portalY,portalX = checkPortal(y,x,portals)
+        if portalY != -99999:
+            if f'{portalY},{portalX}' not in visited:
+                queue.append([portalY,portalX,steps+1])
+
+                
+        
+
+
+
+
+
 
 
    
