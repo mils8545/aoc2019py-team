@@ -79,13 +79,11 @@ def part1(lines):
     while True:
     # while queue[0][2] < 14:
         y,x,steps = queue.pop(0)
-        # print(queue)
         name = f'{y},{x}'
         visited.append(name)
         if name == target:
-            return steps
-        # print(y,x,steps)
-
+            return f"The shortest path between AA and ZZ is {steps}"
+        
         for direction in directions:
             newY = y + direction[0]
             newX = x + direction[1]
@@ -96,20 +94,6 @@ def part1(lines):
         if portalY != -99999:
             if f'{portalY},{portalX}' not in visited:
                 queue.append([portalY,portalX,steps+1])
-
-                
-        
-
-
-
-
-
-
-
-   
-    
-
-    return(f"ANSWER HERE") 
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
