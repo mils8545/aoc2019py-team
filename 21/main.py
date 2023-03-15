@@ -134,6 +134,12 @@ def string2int(input_string):
         integers.append(ord(char))
     return integers
 
+def int2string(input_array):
+    output_string = ""
+    for char in input_array:
+        output_string += chr(char)
+    return output_string
+
 
 def part1(lines):
     # Code the solution to part 1 here, returning the answer as a string
@@ -141,35 +147,34 @@ def part1(lines):
    
     computer = ComputerState(lines[0])
     result = computer.run([]) 
-    for char in result.outputStream:
-        print(chr(char), end = '')  
+    # print(int2string(result.outputStream)) # uncomment if you want to see process
     
     program = "NOT A J\nNOT B T\nOR T J\nNOT C T\nOR T J\nAND D J\nWALK\n"
     
-    result = computer.run(string2int(program)) 
-    for char in result.outputStream:
-        if char < 128 :
-            print(chr(char), end = '')  
-        else:
-            return(f'The score of the robot was: {char}')
+    result = computer.run(string2int(program))
 
-    return f"Done."
+    if result.outputStream[-1] > 128:
+        # print(int2string(result.outputStream[0:-1])) # uncomment if you want to see results
+        return f'The score of the robot was: {result.outputStream[-1]}'
+    else:
+        print(int2string(result.outputStream))
+
+    return f"Done without an answer."
 
 
 def part2(lines):
     computer = ComputerState(lines[0])
     result = computer.run([]) 
-    for char in result.outputStream:
-        print(chr(char), end = '')  
+    # print(int2string(result.outputStream)) # uncomment if you want to see process
     
     program = "NOT A J\nNOT B T\nOR T J\nNOT C T\nOR T J\nAND D J\nNOT A T\nAND A T\nOR E T\nOR H T\nAND T J\nRUN\n"
     
     result = computer.run(string2int(program)) 
-    for char in result.outputStream:
-        if char < 128 :
-            print(chr(char), end = '')  
-        else:
-            return(f'The score of the robot was: {char}')
+    if result.outputStream[-1] > 128:
+        # print(int2string(result.outputStream[0:-1])) # uncomment if you want to see results
+        return f'The score of the robot was: {result.outputStream[-1]}'
+    else:
+        print(int2string(result.outputStream))
 
     return f"Done."
 
