@@ -24,14 +24,14 @@ def part1(lines):
         parsed = line.split(" ")
         if parsed[0] == "cut":
             card_position = cut(int(parsed[1]),card_position, DECKSIZE)
-            print("Cut: " , str(card_position))
+            # print("Cut: " , str(card_position))
         elif parsed[-1] == "stack":
             card_position = deal_into(card_position, DECKSIZE)
-            print("Stack: " + str(card_position))
+            # print("Stack: " + str(card_position))
         else:
             card_position = deal_with(int(parsed[-1]), card_position, DECKSIZE)
-            print("Increment: " + str(card_position))
-    return card_position
+            # print("Increment: " + str(card_position))
+    return f'Card 2019 is at position {card_position}.'
     # print(cut(6,4,10))
         
 def cut(n, current, decksize):
@@ -52,9 +52,43 @@ def deal_with(inc, current, decksize):
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
+    DECKSIZE = 119315717514047
+    card_position = 2020
+    
+    SHUFFLE = 101741582076661
     
     
+    a = 1
+    b = 0
+    
+    for line in lines:
+        parsed = line.split(" ")
+        if parsed[0] == "cut":
+            a, b = cut_mod(a, b, int(parsed[1]), DECKSIZE)
+        elif parsed[-1] == "stack":
+            a, b = deal_into_mod(a, b, DECKSIZE)
+        else:
+            a, b = deal_with_mod(a, b, int(parsed[-1]), DECKSIZE)
+    ma = pow(a, SHUFFLE, DECKSIZE)
+    mb = (b*(ma-1)*inv(a-1, DECKSIZE)) % DECKSIZE
+    return 'The card at position 2020 is ' + str(((card_position-mb)*inv(ma, DECKSIZE)) % DECKSIZE) + '.'
 
+        
+        
+def cut_mod(a, b, n, m):
+    return [a, (b-n) % m]
+
+def deal_into_mod(a, b, m):
+    return [-a % m, (-b-1) % m]
+
+def deal_with_mod(a, b, n, m):
+    return [(n*a) % m, (n*b) % m]
+
+def power_mod(a, b, k, m):
+    return [int(pow(a, k, m)), int(b*(1-pow(a, k, m)/(1-a))) % m ]
+
+def inv(a, n):
+    return pow(a, n-2, n)
     pass
 
 def main ():
