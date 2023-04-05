@@ -165,20 +165,58 @@ def part1(lines):
             x = result.outputStream.pop(0)
             y = result.outputStream.pop(0)
             if addr == 255:
-                return y
+                return f'The Y value of the first packet is: {y}'
             packets[addr].append(x)
             packets[addr].append(y)
         i = (i + 1) % 50
     
-    print(packets)
-    
-    
-
-    return f"Done without an answer."
-
+def is_transmitting(packets):
+    for i in range(50):
+        # print(packets)
+        if len(packets[i]) > 0:
+            return True
+    return False
 
 def part2(lines):
-
+    computers = []
+    packets = {}
+    nat_x = None
+    nat_y = None
+    last_nat_x = None
+    last_nat_y = None
+    for i in range(50):
+        newcomputer = ComputerState(lines[0])
+        result = newcomputer.run([i])
+        computers.append(newcomputer)
+        packets[i]=[]
+    
+    # for i in range(50):
+    i = 0 
+    while(1==1):
+        if len(packets[i]) == 0:
+            result = computers[i].run([-1])
+        else:
+            result = computers[i].run([packets[i].pop(0), packets[i].pop(0)])
+        
+        while len(result.outputStream) > 0:
+            addr = result.outputStream.pop(0)
+            x = result.outputStream.pop(0)
+            y = result.outputStream.pop(0)
+            if addr == 255:
+                nat_x = x
+                nat_y = y
+            else:
+                packets[addr].append(x)
+                packets[addr].append(y)
+        if not is_transmitting(packets):
+            if nat_x == last_nat_x and nat_y == last_nat_y:
+                return f'The first repeated Y value sent by NAT: {nat_y}'  
+            else:
+                packets[0].append(nat_x)
+                packets[0].append(nat_y)  
+                last_nat_x = nat_x
+                last_nat_y = nat_y
+        i = (i + 1) % 50
     return f"Done."
 
 def main ():
