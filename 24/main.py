@@ -49,9 +49,6 @@ def nextGeneration(generation):
                     newLine.append(".")
         next.append(newLine)
     return next
-    
-
-
 
 def part1(lines):
     # Code the solution to part 1 here, returning the answer as a string
@@ -66,24 +63,21 @@ def part1(lines):
         eris = nextGeneration(eris)
         score = bioDiversity(eris)
         if score in seen:
+            # # Uncomment next 3 lines to print out last generation.
+            # print("-----")
+            # for line in eris:
+            #     print("".join(line))
             return score
         else:
             seen.append(score)
-    
-
-
-
-    
-
-    
-
-    return(f"ANSWER HERE") 
+        # # Uncomment next 3 lines to print out generations.
+        # print("-----")
+        # for line in eris:
+        #     print("".join(line))
+        
 
 def part2(lines):
     # Code the solution to part 2 here, returning the answer as a string
-    
-    
-
     pass
 
 def main ():
