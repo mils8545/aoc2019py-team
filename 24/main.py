@@ -207,17 +207,14 @@ def part2(lines):
         eris[0].append(newLine)
     for i in range(200):
         eris = nextGeneration3D(eris)
-    print(eris)
+    # print(eris)
     count = 0
     for z in range(len(eris)):
         for y in range(5):
             for x in range(5):
                 if eris[z][y][x] == "#":
                     count += 1
-    print(count)
-
-    
-   
+    return f"After 200 generations there are {count} bugs."
 
 def main ():
     # Opens a dialog to select the input file
